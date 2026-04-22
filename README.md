@@ -6,7 +6,7 @@ Static data companion to [Stellar Explorer](https://andreaswneitzel.github.io/st
 
 | File                   | Size     | Description                                                |
 | ---------------------- | -------- | ---------------------------------------------------------- |
-| `stellar_data_mist.h5` | ~152 MB  | Single stellar evolutionary track from the MIST v1.2 grid  |
+| `stellar_data_mist.h5` | ~50 MB   | Single stellar evolutionary track from the MIST v1.2 grid  |
 
 ## Data source
 
