@@ -1,2 +1,8 @@
 *:Zone.Identifier
 .DS_Store
+
+# Local-only dev artefacts. The repo serves only the .h5 data files
+# consumed by the Stellar Explorer web app. Source MESA grids, the
+# preprocessing pipeline, and standalone HTML scratchpads live under
+# archive/ so they stay on disk but never reach the public mirror.
+archive/
