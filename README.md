@@ -6,7 +6,7 @@ Static data companion to [Stellar Explorer](https://andreaswneitzel.github.io/st
 
 | File                   | Size   | Description                                            |
 | ---------------------- | ------ | ------------------------------------------------------ |
-| `stellar_data_real.h5` | ~33 MB | 1 M☉ track from MESA r24.08.1 + GYRE (HDF5 schema 3.0) |
+| `stellar_data_real.h5` | ~12 MB | 1 M☉ track from MESA r24.08.1 + GYRE (HDF5 schema 3.1) |
 
 The earlier synthetic MIST baseline (`stellar_data_mist.h5`) is no longer redistributed. The MESA + GYRE track is the only dataset the web app ships against.
 
@@ -17,14 +17,15 @@ The earlier synthetic MIST baseline (`stellar_data_mist.h5`) is no longer redist
 - Metallicity: [Fe/H] = 0.00 (solar)
 - Mass: 1 M☉
 - Coverage: pre-main-sequence contraction through white-dwarf cooling, merged across five MESA segments (`LOGS_to_end_core_h_burn`, `LOGS_to_start_he_core_flash`, `LOGS_to_end_core_he_burn`, `LOGS_to_end_agb`, `LOGS_to_wd`)
-- ~176 models selected by per-phase HR-arc-length sampling, each with a 256-zone interior profile resampled from the native MESA grid (700–2155 zones) and, where available, the matching GYRE mode list
+- The 94 models for which the run saved a profile, in time order, each with its own 256-zone interior resampled from the native MESA grid (700–2155 zones) and its own GYRE mode list where the run produced one. No profile and no mode list is shared between models, and none is synthesised
+- The `history` group carries all 13,024 history rows (`log_Teff`, `log_L`, `log_R`, `star_age`, `model_number`, `phase`) so the HR curve is the run's own track and the 94 models are points on it
 - Mode list carries explicit (ℓ, n<sub>g</sub>, n<sub>p</sub>, n<sub>pg</sub>, E<sub>norm</sub>, freq, mode_type) per mode. `mode_type` ∈ {`p`, `g`, `mp` (mixed p-dominated), `mg` (mixed g-dominated)} via the standard n<sub>g</sub>/n<sub>p</sub>/n<sub>pg</sub> classification
 - Radial displacement eigenfunctions (`xi_r`) are reconstructed by JWKB (Cowling approximation) from the GYRE-format equilibrium structure (`.GYRE` files, format 101): cavities identified by ω² vs S<sub>ℓ</sub>² and N², amplitude factor ∝ (ρ |k<sub>r</sub>|)<sup>−1/2</sup>, evanescent decay outside cavities. GYRE detail/summary HDF5 files are not in the source archive, so per-mode eigenfunctions cannot be loaded directly; JWKB is the closest physically-faithful reconstruction available without re-running GYRE.
 - Track-level seismic observables computed per profile: ν<sub>max</sub> (scaling), Δν (measured from ℓ=0 spacings), δ<sub>02</sub>, ε, asymptotic ΔP<sub>1</sub>, acoustic radius τ<sub>0</sub>
 - AGB segment (different 80-column history schema, 134-column profile schema) handled by a dedicated loader
 - `brunt_N²` sign is preserved (negative in convective zones)
-- Late phases without GYRE output (post-AGB, WD) fall back to an asymptotic scaling-relation p-mode comb, flagged via `track/has_real_gyre`
-- Built by `archive/preprocess_mesa_v2.py` (gitignored)
+- Eight models have no GYRE output in the run (the AGB segment and the first white-dwarf model) and carry an empty mode list, flagged via `track/has_real_gyre`; the viewer reports the absence instead of drawing a comb
+- Built by `archive/preprocess_mesa_v3.py` (gitignored)
 
 If you use this file in scientific work, please reference MESA and GYRE explicitly:
 
